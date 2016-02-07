@@ -56,10 +56,7 @@ class BusinessesViewController: UIViewController, UITableViewDataSource, UITable
             }
         }
 */
-}
-    
-
-    
+}  
     
 override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
