@@ -8,14 +8,14 @@
 
 import UIKit
 
-class BusinessesViewController: UIViewController, UITableViewDataSource, UITableViewDelegate, UISearchResultsUpdating  {
+class BusinessesViewController: UIViewController, UITableViewDataSource, UITableViewDelegate, UISearchResultsUpdating {
 
     var businesses: [Business]!
-//    var filteredBusinesses: [Business]!
-    var searchController = UISearchController()
-//    filteredBusinesses = businesses
+    var filteredData: [Business]!
     
     @IBOutlet weak var tableView: UITableView!
+   
+    var searchController: UISearchController!
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -25,28 +25,26 @@ class BusinessesViewController: UIViewController, UITableViewDataSource, UITable
         tableView.rowHeight = UITableViewAutomaticDimension
         tableView.estimatedRowHeight = 120
         
-   //     filteredBusinesses = businesses
-
-        Business.searchWithTerm("Thai", completion: { (businesses: [Business]!, error: NSError!) -> Void in
-            self.businesses = businesses
-            self.tableView.reloadData()
-        
-            for business in businesses {
-                print(business.name!)
-                print(business.address!)
-            }
-        })
-        
         searchController = UISearchController(searchResultsController: nil)
         searchController.searchResultsUpdater = self
-        searchController.dimsBackgroundDuringPresentation = false
         searchController.searchBar.sizeToFit()
-        
+
         navigationItem.titleView = searchController.searchBar
         searchController.hidesNavigationBarDuringPresentation = false
-    
-        //tableView.tableHeaderView = searchController.searchBar
         definesPresentationContext = true
+        
+//searchController.dimsBackgroundDuringPresentation = false
+
+        
+    Business.searchWithTerm("Thai", completion: { (businesses: [Business]!, error: NSError!) -> Void in
+        self.businesses = businesses
+        self.tableView.reloadData()
+            
+        for business in businesses {
+            print(business.name!)
+            print(business.address!)
+        }
+    })
         
 /* Example of Yelp search with more search options specified
         Business.searchWithTerm("Restaurants", sort: .Distance, categories: ["asianfusion", "burgers"], deals: true) { (businesses: [Business]!, error: NSError!) -> Void in
@@ -59,32 +57,46 @@ class BusinessesViewController: UIViewController, UITableViewDataSource, UITable
         }
 */
 }
+    
 
+    
+    
 override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
 }
     
-func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCellWithIdentifier("BusinessCell", forIndexPath: indexPath) as! BusinessCell
-        cell.business = businesses[indexPath.row]
-        return cell
+func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int{
+    if businesses != nil {
+        return businesses!.count
+    } else {
+        return 0
+    }
 }
     
-func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int{
-        if businesses != nil {
-            return businesses!.count
-        } else {
-            return 0
-        }
+func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
+    let cell = tableView.dequeueReusableCellWithIdentifier("BusinessCell", forIndexPath: indexPath) as! BusinessCell
+    cell.business = businesses[indexPath.row]
+    return cell
 }
+    
 
+    
 func updateSearchResultsForSearchController(searchController: UISearchController){
+    if filteredData == nil{
+        filteredData = businesses
+    }
+    
     if let searchText = searchController.searchBar.text {
-        businesses = searchText.isEmpty ? businesses : businesses?.filter({(business:Business) -> Bool in
-            return business.name!.rangeOfString(searchText, options: .CaseInsensitiveSearch) != nil
-        })
-        tableView.reloadData()
+        if(searchText == "") {
+            businesses = filteredData
+            tableView.reloadData()
+        } else {
+             businesses = searchText.isEmpty ? businesses : businesses?.filter({(dataItem:Business) -> Bool in
+                dataItem.name!.rangeOfString(searchText, options: .CaseInsensitiveSearch) != nil
+            })
+            tableView.reloadData()
+        }
     }
 }
 
