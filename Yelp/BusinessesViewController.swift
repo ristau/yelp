@@ -8,14 +8,15 @@
 
 import UIKit
 
-class BusinessesViewController: UIViewController, UITableViewDataSource, UITableViewDelegate, UISearchResultsUpdating {
+class BusinessesViewController: UIViewController, UITableViewDataSource, UITableViewDelegate, UISearchResultsUpdating, UIScrollViewDelegate {
 
     var businesses: [Business]!
     var filteredData: [Business]!
+    var searchController: UISearchController!
+    var isMoreDataLoading = false
     
     @IBOutlet weak var tableView: UITableView!
    
-    var searchController: UISearchController!
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -34,17 +35,23 @@ class BusinessesViewController: UIViewController, UITableViewDataSource, UITable
         definesPresentationContext = true
         
 //searchController.dimsBackgroundDuringPresentation = false
-
         
+        getFoodData()
+
+}
+        
+func getFoodData(){
+
     Business.searchWithTerm("Thai", completion: { (businesses: [Business]!, error: NSError!) -> Void in
         self.businesses = businesses
         self.tableView.reloadData()
-            
+        
         for business in businesses {
             print(business.name!)
             print(business.address!)
         }
     })
+}
         
 /* Example of Yelp search with more search options specified
         Business.searchWithTerm("Restaurants", sort: .Distance, categories: ["asianfusion", "burgers"], deals: true) { (businesses: [Business]!, error: NSError!) -> Void in
@@ -56,7 +63,7 @@ class BusinessesViewController: UIViewController, UITableViewDataSource, UITable
             }
         }
 */
-}  
+  
     
 override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
@@ -77,6 +84,27 @@ func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexP
     return cell
 }
     
+func scrollViewDidScroll(scrollView: UIScrollView){
+    if(!isMoreDataLoading) {
+        
+        // Calculate the position of one screen length before the bottom of the results
+        let scrollViewContentHeight = tableView.contentSize.height
+        let scrollOffsetThreshold = scrollViewContentHeight - tableView.bounds.size.height
+        
+        // When the user has scrolled past the threshold, start requesting
+        if(scrollView.contentOffset.y > scrollOffsetThreshold && tableView.dragging) {
+            isMoreDataLoading = true
+
+        // code to load more results
+            loadMoreData()
+    }
+    
+    }
+}
+    
+func loadMoreData() {
+
+}
 
     
 func updateSearchResultsForSearchController(searchController: UISearchController){
