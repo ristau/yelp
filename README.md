@@ -2,22 +2,24 @@
 
 **Yelp** is a Yelp search app using the [Yelp API](http://www.yelp.com/developers/documentation/v2/search_api).
 
-Time spent: **X** hours spent in total
+Time spent: **8** hours spent in total
 
 ## User Stories
 
 The following **required** functionality is completed:
 
-- [ ] Table rows for search results should be dynamic height according to the content height.
-- [ ] Custom cells should have the proper Auto Layout constraints.
-- [ ] Search bar should be in the navigation bar (doesn't have to expand to show location like the real Yelp app does).
+- [X] Table rows for search results should be dynamic height according to the content height.
+- [X] Custom cells should have the proper Auto Layout constraints.
+- [X] Search bar should be in the navigation bar (doesn't have to expand to show location like the real Yelp app does).
 
 The following **optional** features are implemented:
 
-- [ ] Search results page
+- [X] Search results page 
    - [ ] Infinite scroll for restaurant results.
    - [ ] Implement map view of restaurant results.
 - [ ] Implement the restaurant detail page.
+
+***NOTE: I am still working on the optional features.  Will continue to update this file as I progress.  
 
 The following **additional** features are implemented:
 
@@ -32,7 +34,7 @@ Please list two areas of the assignment you'd like to **discuss further with you
 
 Here's a walkthrough of implemented user stories:
 
-<img src='http://i.imgur.com/link/to/your/gif/file.gif' title='Video Walkthrough' width='' alt='Video Walkthrough' />
+<img src='http://i.imgur.com/1yrH85u.gif' title='Video Walkthrough' width='' alt='Video Walkthrough' />
 
 GIF created with [LiceCap](http://www.cockos.com/licecap/).
 
